@@ -31,6 +31,9 @@ Last updated: April 2026.
 - [ ] App works correctly whether user accepts or denies tracking
 - [ ] `app_tracking_transparency` package in `pubspec.yaml`
 - [ ] UMP (User Messaging Platform) consent flow for GDPR also implemented
+- [ ] **Guideline 5.1.1(iv)**: If user denies ATT ("Ask App Not to Track"), do NOT show a UMP/GDPR consent form that asks about tracking or personalized ads. This is considered a contradictory double-prompt and will be rejected. Instead, skip the UMP form and serve non-personalized ads only.
+- [ ] The ATT → UMP flow must be sequential: if ATT denied, UMP is skipped entirely on iOS
+- [ ] On Android (no ATT), UMP/GDPR should still be shown normally
 
 ### App Privacy Labels
 - [ ] Data types match actual collection (analytics, advertising, crash logs, etc.)
@@ -190,3 +193,4 @@ Common keys to check:
 4. **Guideline 4.0 (Design)**: Not following HIG, broken layout on certain devices
 5. **Guideline 5.1.1 (Privacy)**: Missing privacy manifest, incomplete data declarations
 6. **Guideline 5.1.2 (ATT)**: Tracking without ATT prompt, or ATT timing issues
+7. **Guideline 5.1.1(iv) (ATT+GDPR)**: Showing UMP/GDPR tracking consent AFTER user denied ATT. If ATT is denied, skip UMP form entirely — do not ask about tracking/personalized ads again in the same flow
