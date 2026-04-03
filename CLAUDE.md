@@ -50,6 +50,11 @@ Output a structured report at the end with a summary score and prioritized list 
   - If status is already determined (authorized/denied/restricted), don't re-request
 - Check for `app_tracking_transparency` in `pubspec.yaml` dependencies
 - **Common rejection**: ATT requested too early, before UI is visible (Guideline 2.1)
+- **Guideline 5.1.1(iv) — ATT + UMP/GDPR conflict**: If the user denies ATT ("Ask App Not to Track"), do NOT subsequently show a UMP/GDPR consent form that asks about tracking or personalized ads. Apple considers this a contradictory double-prompt and will reject the app. The correct flow is:
+  1. Show ATT prompt
+  2. If ATT denied → skip UMP form, serve non-personalized ads only
+  3. If ATT authorized → show UMP form for GDPR consent
+  4. On Android (no ATT) → show UMP form normally
 
 #### 2.3 Info.plist Permission Descriptions
 - Every `NS*UsageDescription` key must have a clear, specific, user-facing explanation
@@ -73,6 +78,11 @@ Output a structured report at the end with a summary score and prioritized list 
 - Flutter's minimum iOS version should be compatible
 - Warn if using deprecated APIs that iOS 26 removes
 - Note: iOS 26 SDK applies Liquid Glass UI by default to native components
+- **NFC Breaking Changes with iOS 26 SDK**:
+  - `NDEF` is disallowed in NFC entitlements (`com.apple.developer.nfc.readersession.formats`). Only `TAG` is permitted. Apple will reject uploads with NDEF in entitlements when built with SDK 26.
+  - `NFCNDEFReaderSession.readingAvailable` requires the NDEF entitlement and will return false without it. Use `NFCTagReaderSession.readingAvailable` instead (works with TAG entitlement).
+  - `pollingOption: [.iso14443, .iso15693]` combining both protocols may break ISO 14443 detection on iOS 26. Use `.iso14443` alone for MiFare/NTAG tags, and only combine with `.iso15693` for auto-detect or ISO 15693/NFC-V tags.
+  - Check both `Runner.entitlements` and `RunnerRelease.entitlements` for NFC format entries.
 
 #### 2.5 Sign in with Apple + Account Deletion
 - If the app offers ANY third-party login (Google, Facebook, email), it MUST also offer Sign in with Apple

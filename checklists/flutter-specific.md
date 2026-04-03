@@ -94,8 +94,10 @@ Last updated: April 2026.
 ## Build Verification
 
 ### iOS Release Build
-- [ ] `flutter build ios --release --no-codesign` succeeds (CI/verification)
-- [ ] `flutter build ios --release` succeeds (with signing)
+- [ ] `flutter build ios --release --no-codesign` succeeds (CI/verification only — does NOT produce IPA)
+- [ ] `flutter build ios --release` succeeds (with signing — also does NOT produce IPA)
+- [ ] **For store/Fastlane upload**: use `flutter build ipa --release` which produces a signed IPA at `build/ios/ipa/`
+- [ ] Copy IPA to Fastlane expected path (e.g., `ios/build/ipa/`) if Fastlane lane references a specific path
 - [ ] Archive created: `xcodebuild -workspace ... -scheme Runner -archivePath ... archive`
 - [ ] IPA exported: `xcodebuild -exportArchive -archivePath ... -exportOptionsPlist ... -exportPath ...`
 - [ ] Archive visible in Xcode Organizer (`~/Library/Developer/Xcode/Archives/`)

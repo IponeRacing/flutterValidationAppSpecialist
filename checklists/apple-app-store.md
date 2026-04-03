@@ -79,6 +79,11 @@ Common keys to check:
 - [ ] Tested Liquid Glass UI appearance (iOS 26 default for native components)
 - [ ] No deprecated API usage that iOS 26 removes
 
+### iOS 26 SDK Breaking Changes
+- [ ] **NFC Entitlements**: `NDEF` is DISALLOWED in `com.apple.developer.nfc.readersession.formats` with SDK 26. Only `TAG` is allowed. Remove `NDEF` from both `Runner.entitlements` and `RunnerRelease.entitlements`.
+- [ ] **NFC Availability Check**: `NFCNDEFReaderSession.readingAvailable` requires the NDEF entitlement (now forbidden). Use `NFCTagReaderSession.readingAvailable` instead — it works with the TAG entitlement.
+- [ ] **NFC Polling Options**: `pollingOption: [.iso14443, .iso15693]` may break ISO 14443 detection on iOS 26. Use `.iso14443` alone for ISO 14443 tags and only combine with `.iso15693` when auto-detecting or reading ISO 15693 (NFC-V) tags.
+
 ### Build Configuration
 - [ ] `flutter build ios --release` succeeds without errors
 - [ ] Code signing configured correctly (automatic or manual)
@@ -86,6 +91,7 @@ Common keys to check:
 - [ ] Team ID is correct in Xcode project settings
 - [ ] Bitcode setting matches requirements (disabled for Flutter)
 - [ ] Archive exports correctly as `.ipa` via `xcodebuild -exportArchive`
+- [ ] **IPA for Fastlane**: Use `flutter build ipa --release` (produces signed IPA in `build/ios/ipa/`). Note: `flutter build ios --release --no-codesign` does NOT produce an IPA file — it only builds the `.app` bundle. Copy the IPA to the location expected by Fastlane (e.g., `ios/build/ipa/`).
 
 ## Authentication & Accounts
 
